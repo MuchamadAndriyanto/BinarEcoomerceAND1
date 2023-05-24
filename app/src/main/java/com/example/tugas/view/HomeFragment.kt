@@ -3,7 +3,10 @@ package com.example.tugas.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +31,9 @@ class HomeFragment : Fragment() {
     private val list = ArrayList<imageData>()
     private lateinit var dost: ArrayList<TextView>
 
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +47,19 @@ class HomeFragment : Fragment() {
         pref = requireActivity().getSharedPreferences("Register", Context.MODE_PRIVATE)
 //        val username = pref.getString("username", "username")
 //        binding.tvWelcome.text = "Welcome, $username"
+
+        handler = Handler(Looper.getMainLooper())
+        runnable = object : Runnable {
+            var index = 0
+            override fun run() {
+                if (index == list.size)
+                    index = 0
+                Log.e("Runnable,", "$index")
+                binding.viewpager.setCurrentItem(index)
+                index++
+                handler.postDelayed(this, 2000)
+            }
+        }
 
         list.add(
             imageData(
@@ -109,8 +128,15 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onStop(){
+        super.onStop()
+        handler.removeCallbacks(runnable)
+    }
+
+
     override fun onStart() {
         super.onStart()
+        handler.post(runnable)
 
         val viewModelNews = ViewModelProvider(this).get(NewsViewModel::class.java)
         viewModelNews.callApiNews()
