@@ -13,14 +13,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.example.tugas.R
 import com.example.tugas.databinding.FragmentHomeBinding
-import com.example.tugas.model.imageData
+import com.example.tugas.model.slider.imageData
 import com.example.tugas.view.adapter.ImageSliderAdapter
 import com.example.tugas.view.adapter.NewsUpdateAdapter
 import com.example.tugas.viewmodel.NewsViewModel
-import com.google.android.play.core.integrity.i
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -110,17 +109,17 @@ class HomeFragment : Fragment() {
 
     }
 
-    override fun onStart(){
+    override fun onStart() {
         super.onStart()
 
         val viewModelNews = ViewModelProvider(this).get(NewsViewModel::class.java)
         viewModelNews.callApiNews()
-        viewModelNews.livedatamovie.observe(this, Observer{
-            if (it != null){
-                binding.rvNewsUpdate.layoutManager = GridLayoutManager(context, 2)
-                binding.rvNewsUpdate.adapter = NewsUpdateAdapter(it)
+        viewModelNews.liveDataNews.observe(viewLifecycleOwner, Observer { newsList ->
+            if (newsList != null) {
+                val newsAdapter = NewsUpdateAdapter(newsList)
+                binding.rvNewsUpdate.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                binding.rvNewsUpdate.adapter = newsAdapter
             }
         })
-
     }
 }

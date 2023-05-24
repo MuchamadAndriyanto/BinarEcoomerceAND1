@@ -7,20 +7,26 @@ import com.bumptech.glide.Glide
 import com.example.tugas.databinding.ItemNewsupdateBinding
 import com.example.tugas.model.GetNewsUpdateItem
 
-class NewsUpdateAdapter(var listNews : List<GetNewsUpdateItem>) : RecyclerView.Adapter<NewsUpdateAdapter.ViewHolder>(){
-    class ViewHolder (var binding : ItemNewsupdateBinding): RecyclerView.ViewHolder(binding.root){
+class NewsUpdateAdapter(private val listNews: List<GetNewsUpdateItem>) : RecyclerView.Adapter<NewsUpdateAdapter.ViewHolder>() {
 
+    inner class ViewHolder(private val binding: ItemNewsupdateBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(newsItem: GetNewsUpdateItem) {
+            binding.tvTitle.text = newsItem.title
+            binding.tvDate.text = newsItem.createdAt
+            Glide.with(binding.root)
+                .load(newsItem.newsImage).into(binding.imgView)
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsUpdateAdapter.ViewHolder {
-        var view = ItemNewsupdateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemNewsupdateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: NewsUpdateAdapter.ViewHolder, position: Int) {
-        holder.binding.tvTitle.text = listNews[position].title
-        holder.binding.tvDate.text = listNews[position].createdAt
-        Glide.with(holder.itemView).load(listNews[position].newsImage).into(holder.binding.imgView)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val newsItem = listNews[position]
+        holder.bind(newsItem)
     }
 
     override fun getItemCount(): Int {

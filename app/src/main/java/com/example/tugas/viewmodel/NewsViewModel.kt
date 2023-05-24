@@ -1,6 +1,5 @@
 package com.example.tugas.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tugas.model.GetNewsUpdateItem
@@ -10,8 +9,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class NewsViewModel : ViewModel() {
-    var livedatamovie: MutableLiveData<List<GetNewsUpdateItem>?> = MutableLiveData()
-
+    val liveDataNews: MutableLiveData<List<GetNewsUpdateItem>?> = MutableLiveData()
 
     fun callApiNews() {
         ApiClient.instance.getAllNews().enqueue(object : Callback<List<GetNewsUpdateItem>> {
@@ -20,14 +18,14 @@ class NewsViewModel : ViewModel() {
                 response: Response<List<GetNewsUpdateItem>>
             ) {
                 if (response.isSuccessful) {
-                    livedatamovie.postValue(response.body())
+                    liveDataNews.postValue(response.body())
                 } else {
-                    livedatamovie.postValue(null)
+                    liveDataNews.postValue(null)
                 }
             }
 
             override fun onFailure(call: Call<List<GetNewsUpdateItem>>, t: Throwable) {
-                livedatamovie.postValue(null)
+                liveDataNews.postValue(null)
             }
         })
     }
