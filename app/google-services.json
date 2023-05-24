@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "88399747664",
+    "project_id": "ecoomerce-5dadd",
+    "storage_bucket": "ecoomerce-5dadd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88399747664:android:8027f9936e6283eb834f55",
+        "android_client_info": {
+          "package_name": "com.example.tugas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88399747664-bo0djaeh499jvl5hkce21nrmejkcil98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tugas",
+            "certificate_hash": "aa73bb1108bbb7993b207349307ffb8f7acad878"
+          }
+        },
+        {
+          "client_id": "88399747664-ujtgd46srcelv1bnm7n4hrvg6ie3fdd0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWyhzTktj9HN0aUskMVWEYKaE2-IF3y9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "88399747664-ujtgd46srcelv1bnm7n4hrvg6ie3fdd0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
