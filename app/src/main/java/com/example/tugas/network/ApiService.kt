@@ -20,7 +20,7 @@ interface ApiService {
         @Path("id") id : Int,
     ):Call<List<GetSlidersItem>>
 
-    @GET("category_product/1/products")
+    @GET("category_product/3/products")
     fun getAllProduct(): Call<List<GetProductsItem>>
 
 }
