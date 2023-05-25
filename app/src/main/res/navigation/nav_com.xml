@@ -34,10 +34,34 @@
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.tugas.view.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.example.tugas.view.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.tugas.view.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.tugas.view.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>
