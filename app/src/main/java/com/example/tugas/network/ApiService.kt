@@ -1,6 +1,7 @@
 package com.example.tugas.network
 
 import com.example.tugas.model.GetNewsUpdateItem
+import com.example.tugas.model.GetProductsItem
 import com.example.tugas.model.GetSlidersItem
 import com.example.tugas.model.GetUserItem
 import retrofit2.Call
@@ -18,5 +19,8 @@ interface ApiService {
     fun getSliderById(
         @Path("id") id : Int,
     ):Call<List<GetSlidersItem>>
+
+    @GET("category_product/1/products")
+    fun getAllProduct(): Call<List<GetProductsItem>>
 
 }

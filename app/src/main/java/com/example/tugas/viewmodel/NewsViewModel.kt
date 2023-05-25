@@ -9,6 +9,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class NewsViewModel : ViewModel() {
+
     val liveDataNews: MutableLiveData<List<GetNewsUpdateItem>?> = MutableLiveData()
 
     fun callApiNews() {

@@ -22,7 +22,9 @@ import com.example.tugas.databinding.FragmentHomeBinding
 import com.example.tugas.model.slider.imageData
 import com.example.tugas.view.adapter.ImageSliderAdapter
 import com.example.tugas.view.adapter.NewsUpdateAdapter
+import com.example.tugas.view.adapter.ProductsAdapter
 import com.example.tugas.viewmodel.NewsViewModel
+import com.example.tugas.viewmodel.ProductsViewModel
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -128,7 +130,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    override fun onStop(){
+    override fun onStop() {
         super.onStop()
         handler.removeCallbacks(runnable)
     }
@@ -143,8 +145,20 @@ class HomeFragment : Fragment() {
         viewModelNews.liveDataNews.observe(viewLifecycleOwner, Observer { newsList ->
             if (newsList != null) {
                 val newsAdapter = NewsUpdateAdapter(newsList)
-                binding.rvNewsUpdate.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                binding.rvNewsUpdate.layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 binding.rvNewsUpdate.adapter = newsAdapter
+            }
+        })
+
+        val viewModelProduct = ViewModelProvider(this).get(ProductsViewModel::class.java)
+        viewModelProduct.callApiProducts()
+        viewModelProduct.liveDataProducts.observe(viewLifecycleOwner, Observer { productList ->
+            if (productList != null) {
+                val productsAdapter = ProductsAdapter(productList)
+                binding.rvProducts.layoutManager =
+                  GridLayoutManager(context,2)
+                binding.rvProducts.adapter = productsAdapter
             }
         })
     }
