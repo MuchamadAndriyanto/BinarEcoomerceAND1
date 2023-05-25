@@ -120,14 +120,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun setIndicator() {
+        binding.dotIndi.removeAllViews()
+
         for (i in 0 until list.size) {
-            dost.add(TextView(requireContext()))
-            dost[i].text = Html.fromHtml("&#9679", Html.FROM_HTML_MODE_LEGACY).toString()
-            dost[i].textSize = 18f
-            binding.dotIndi.addView(dost[i])
+            val dotView = TextView(requireContext())
+            dotView.text = Html.fromHtml("&#9679;", Html.FROM_HTML_MODE_LEGACY).toString()
+            dotView.textSize = 18f
+            binding.dotIndi.addView(dotView)
+            dost.add(dotView)
         }
-
-
     }
 
     override fun onStop() {
