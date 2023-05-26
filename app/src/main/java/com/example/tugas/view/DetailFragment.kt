@@ -9,8 +9,9 @@ import com.bumptech.glide.Glide
 import com.example.tugas.R
 import com.example.tugas.databinding.FragmentDetailBinding
 import com.example.tugas.model.detail.DetailListProduct
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding

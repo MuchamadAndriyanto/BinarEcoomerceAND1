@@ -52,7 +52,7 @@
         android:padding="10dp">
 
         <com.denzcoskun.imageslider.ImageSlider
-            android:id="@+id/imageSlider"
+            android:id="@+id/imageSliders"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             app:iss_period="2000"
@@ -65,9 +65,10 @@
             android:id="@+id/dotIndi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/yellow"
             android:gravity="center_vertical|center_horizontal"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/imageSlider"
+            app:layout_constraintTop_toBottomOf="@id/imageSliders"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -84,7 +85,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvNewsUpdate"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="235dp"
             app:layout_constraintTop_toBottomOf="@id/tvNewsUpdate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

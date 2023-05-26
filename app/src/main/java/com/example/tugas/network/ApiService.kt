@@ -10,15 +10,13 @@ import retrofit2.http.Path
 
 interface ApiService {
     @GET("news_update")
-    fun getAllNews(): Call<List<GetNewsUpdateItem>>
+    fun getAllNewsUpdate(): Call<List<GetNewsUpdateItem>>
 
     @GET("users")
     fun getAllUsers(): Call<List<GetUserItem>>
 
-    @GET("sliders/{id}")
-    fun getSliderById(
-        @Path("id") id : Int,
-    ):Call<List<GetSlidersItem>>
+    @GET("sliders")
+    fun getSlider():Call<List<GetSlidersItem>>
 
     @GET("category_product/3/products")
     fun getAllProduct(): Call<List<GetProductsItem>>

@@ -5,15 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tugas.databinding.ItemSlideBinding
-import com.example.tugas.model.slider.imageData
+import com.example.tugas.model.GetSlidersItem
 
-class ImageSliderAdapter(private val items: List<imageData>) : RecyclerView.Adapter<ImageSliderAdapter.ViewHolder>() {
+class ImageSliderAdapter(private val items: List<GetSlidersItem>) : RecyclerView.Adapter<ImageSliderAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemSlideBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: imageData) {
-            Glide.with(binding.root)
-                .load(data.imageUrl)
-                .into(binding.ivSlider)
+        fun bind(data: GetSlidersItem) {
+            Glide.with(itemView).load(data.image).into(binding.ivSlider)
         }
     }
 

@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.tugas.R
 import com.example.tugas.databinding.FragmentLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding

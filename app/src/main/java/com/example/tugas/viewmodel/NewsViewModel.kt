@@ -4,16 +4,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tugas.model.GetNewsUpdateItem
 import com.example.tugas.network.ApiClient
+import com.example.tugas.network.ApiService
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class NewsViewModel : ViewModel() {
+@HiltViewModel
+class NewsViewModel @Inject constructor(private var api : ApiService): ViewModel() {
 
     val liveDataNews: MutableLiveData<List<GetNewsUpdateItem>?> = MutableLiveData()
 
     fun callApiNews() {
-        ApiClient.instance.getAllNews().enqueue(object : Callback<List<GetNewsUpdateItem>> {
+        api.getAllNewsUpdate().enqueue(object : Callback<List<GetNewsUpdateItem>> {
             override fun onResponse(
                 call: Call<List<GetNewsUpdateItem>>,
                 response: Response<List<GetNewsUpdateItem>>

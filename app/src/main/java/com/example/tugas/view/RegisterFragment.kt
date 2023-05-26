@@ -12,8 +12,9 @@ import androidx.navigation.Navigation
 import com.example.tugas.R
 import com.example.tugas.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
     private lateinit var sharedpref: SharedPreferences

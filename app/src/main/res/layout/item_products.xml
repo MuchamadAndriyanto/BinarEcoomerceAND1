@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/imgView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_launcher_background"
             android:contentDescription="TODO"

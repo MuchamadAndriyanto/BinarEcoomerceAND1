@@ -19,16 +19,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.tugas.R
 import com.example.tugas.databinding.FragmentHomeBinding
+import com.example.tugas.view.adapter.ImageSliderAdapter
 import com.example.tugas.view.adapter.NewsUpdateAdapter
 import com.example.tugas.view.adapter.ProductsAdapter
+import com.example.tugas.viewmodel.HomeViewModel
 import com.example.tugas.viewmodel.NewsViewModel
 import com.example.tugas.viewmodel.ProductsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var pref: SharedPreferences
     private val imageListSliders = arrayListOf<SlideModel>()
-
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
 
@@ -51,8 +54,8 @@ class HomeFragment : Fragment() {
         imageListSliders.add(SlideModel("https://dimsemenov.com/plugins/royal-slider/img/laptop.png"))
         imageListSliders.add(SlideModel("https://i0.wp.com/www.smartprix.com/bytes/wp-content/uploads/2022/05/iPhone14-1-photoutils.com_.jpeg"))
 
-        val sliderLayout = binding.imageSlider
-        sliderLayout.setImageList(imageListSliders)
+        val slidersLayout = binding.imageSliders
+        slidersLayout.setImageList(imageListSliders)
 
     }
 
@@ -64,11 +67,23 @@ class HomeFragment : Fragment() {
         }
         handler.post(runnable)
 
+//        val viewModelSliders = ViewModelProvider(this).get(HomeViewModel::class.java)
+//        viewModelSliders.getSlider()
+//        viewModelSliders.liveDataSliders.observe(viewLifecycleOwner, Observer { slidersList ->
+//            if (slidersList != null) {
+//                val newsAdapter = ImageSliderAdapter(slidersList)
+//                binding.imageSliders.layoutManager =
+//                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//                binding.imageSliders.adapter = newsAdapter
+//            }
+//        })
+
+
         val viewModelNews = ViewModelProvider(this).get(NewsViewModel::class.java)
         viewModelNews.callApiNews()
-        viewModelNews.liveDataNews.observe(viewLifecycleOwner, Observer { newsList ->
-            if (newsList != null) {
-                val newsAdapter = NewsUpdateAdapter(newsList)
+        viewModelNews.liveDataNews.observe(viewLifecycleOwner, Observer { newsupdateList ->
+            if (newsupdateList != null) {
+                val newsAdapter = NewsUpdateAdapter(newsupdateList)
                 binding.rvNewsUpdate.layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 binding.rvNewsUpdate.adapter = newsAdapter
