@@ -9,15 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.tugas.R
 import com.example.tugas.databinding.FragmentRegisterBinding
+import com.example.tugas.network.ApiClient
+import com.example.tugas.network.ApiResponse
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
-    private lateinit var sharedpref: SharedPreferences
+    private val apiService = ApiClient.create()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,36 +37,38 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedpref = requireActivity().getSharedPreferences("Register", Context.MODE_PRIVATE)
 
         binding.btnRegister.setOnClickListener {
-            register()
+            val username = binding.usernameEditText.text.toString()
+            val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+
+            // Panggil metode registerUser
+            registerUser(username,email, password)
         }
     }
 
-    private fun register() {
-        val username = binding.usernameEditText.text.toString()
-        val email = binding.emailEditText.text.toString()
-        val pass = binding.passwordEditText.text.toString()
-        val confirmpass = binding.confirmasiEditText.text.toString()
-
-        val addAkun = sharedpref.edit()
-        addAkun.putString("username", username)
-
-        if (username.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty() && confirmpass.isNotEmpty()) {
-            if (pass == confirmpass) {
-                addAkun.apply()
-                registerUser(username, email, pass)
-            } else {
-                Toast.makeText(context, "Password Anda Masih Belum Sesuai", Toast.LENGTH_LONG).show()
+    private fun registerUser(username: String,email: String, password: String) {
+        val call = apiService.registerUser(username,email, password)
+        call.enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.success ) {
+                        Toast.makeText(context, "Register Berhasil", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+                    } else {
+                        Toast.makeText(context, "Register Gagal", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, "Register Gagal", Toast.LENGTH_SHORT).show()
+                }
             }
-        } else {
-            Toast.makeText(context, "Maaf Masih Ada Data Yang Masih Belum di Isi", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    private fun registerUser(username: String, email: String, password: String) {
-        Navigation.findNavController(binding.root)
-            .navigate(R.id.action_registerFragment_to_loginFragment)
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                // Kegagalan koneksi atau request
+                // Tampilkan pesan kesalahan
+            }
+        })
     }
 }

@@ -39,4 +39,14 @@ object ApiClient {
     @Provides
     fun provideNewsApi(retrofit: Retrofit): ApiService =
         retrofit.create(ApiService::class.java)
+
+    fun create(): ApiService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(ApiService::class.java)
+    }
+
 }
