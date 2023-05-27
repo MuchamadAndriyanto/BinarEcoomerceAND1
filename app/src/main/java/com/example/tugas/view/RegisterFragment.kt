@@ -55,10 +55,10 @@ class RegisterFragment : Fragment() {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null && apiResponse.success ) {
+                        Toast.makeText(context, "Register Gagal", Toast.LENGTH_SHORT).show()
+                    } else {
                         Toast.makeText(context, "Register Berhasil", Toast.LENGTH_SHORT).show()
                         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-                    } else {
-                        Toast.makeText(context, "Register Gagal", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(context, "Register Gagal", Toast.LENGTH_SHORT).show()
