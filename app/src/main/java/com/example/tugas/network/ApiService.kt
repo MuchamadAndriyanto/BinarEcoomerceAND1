@@ -5,6 +5,7 @@ import com.example.tugas.model.GetProductsItem
 import com.example.tugas.model.GetSlidersItem
 import com.example.tugas.model.GetUserItem
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -31,6 +32,14 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<ApiResponse>
+
+    @FormUrlEncoded
+    @POST("users")
+    fun user(
+        @Field("email") username: String,
+        @Field("password") password: String
+    ): Call<ApiResponse>
+
 
 
 }
