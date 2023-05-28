@@ -43,6 +43,10 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnReg.setOnClickListener{
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
         binding.btnLogin.setOnClickListener {
             val username = binding.emailEditText.text.toString()
             val password = binding.passwordEdiText.text.toString()

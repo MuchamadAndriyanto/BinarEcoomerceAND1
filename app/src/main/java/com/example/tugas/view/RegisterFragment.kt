@@ -39,6 +39,7 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+
         binding.btnRegister.setOnClickListener {
             val username = binding.usernameEditText.text.toString()
             val email = binding.emailEditText.text.toString()
