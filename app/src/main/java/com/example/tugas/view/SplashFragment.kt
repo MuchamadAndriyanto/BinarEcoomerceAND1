@@ -29,7 +29,7 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val isConnected = isNetworkConnected()
         Handler().postDelayed({
-            
+
                 if (isConnected) {
                     Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_homeFragment)
 
