@@ -15,6 +15,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.tugas.R
 import com.example.tugas.databinding.FragmentLoginBinding
+import com.example.tugas.model.GetUserItem
 import com.example.tugas.network.ApiClient
 import com.example.tugas.network.ApiResponse
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,9 +27,6 @@ import retrofit2.Response
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
-    private lateinit var etUsername: EditText
-    private lateinit var etPassword: EditText
-    private lateinit var btnLogin: Button
     private val apiService = ApiClient.create()
 
     @SuppressLint("MissingInflatedId")
@@ -57,19 +55,24 @@ class LoginFragment : Fragment() {
     }
 
     private fun login(username: String, password: String) {
-        val call = apiService.user(username, password)
-        call.enqueue(object : Callback<ApiResponse> {
-            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+        val call = apiService.getAllUsers()
+        call.enqueue(object : Callback<List<GetUserItem>> {
+            override fun onResponse(call: Call<List<GetUserItem>>, response: Response<List<GetUserItem>>) {
                 if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    if (apiResponse != null && apiResponse.success) {
-                        // Login berhasil
-                        Toast.makeText(context, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                        // Navigasi ke halaman beranda atau halaman lain yang sesuai
-                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-                    } else {
-                        // Login gagal
-                        Toast.makeText(context, "Username atau password salah", Toast.LENGTH_SHORT).show()
+                    val userList = response.body()
+                    if (userList != null) {
+                        // Cek apakah pengguna dengan username yang diberikan ada dalam daftar pengguna
+                        val matchingUser = userList.find { it.email == username }
+                        if (matchingUser != null && matchingUser.password == password) {
+                            // Login berhasil
+                            Toast.makeText(context, "Login Berhasil", Toast.LENGTH_SHORT).show()
+                            // Simpan informasi pengguna untuk profil
+                            // Navigasi ke halaman beranda atau halaman lain yang sesuai
+                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        } else {
+                            // Login gagal
+                            Toast.makeText(context, "Username atau password salah", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } else {
                     // Respons tidak berhasil
@@ -77,11 +80,11 @@ class LoginFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+            override fun onFailure(call: Call<List<GetUserItem>>, t: Throwable) {
                 // Kegagalan koneksi atau request
                 Toast.makeText(context, "Terjadi kesalahan saat melakukan login", Toast.LENGTH_SHORT).show()
             }
-
         })
     }
+
 }

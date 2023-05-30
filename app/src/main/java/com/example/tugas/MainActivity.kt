@@ -19,25 +19,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupBottomNavigation()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.bottom_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.favorit -> {
-                findNavController().navigate(R.id.action_homeFragment_to_favoriteFragment)
-                true
+    private fun setupBottomNavigation() {
+        binding.bottomMenu.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    findNavController().navigate(R.id.homeFragment)
+                    true
+                }
+                R.id.favorit -> {
+                    findNavController().navigate(R.id.action_homeFragment_to_favoriteFragment)
+                    true
+                }
+                R.id.list -> {
+                    findNavController().navigate(R.id.action_homeFragment_to_detailFragment)
+                    true
+                }
+                R.id.profile -> {
+                    findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+                    true
+                }
+                else -> false
             }
-            R.id.profile -> {
-                findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
