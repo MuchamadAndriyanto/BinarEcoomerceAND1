@@ -2,6 +2,7 @@ package com.example.tugas.model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class GetUserItem(
     @SerializedName("createdAt")
@@ -16,4 +17,4 @@ data class GetUserItem(
     val name: String,
     @SerializedName("password")
     val password: String
-)
+): Serializable
