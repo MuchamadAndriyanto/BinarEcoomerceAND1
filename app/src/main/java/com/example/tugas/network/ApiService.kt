@@ -1,5 +1,6 @@
 package com.example.tugas.network
 
+import com.example.tugas.model.GetFavouriteItem
 import com.example.tugas.model.GetNewsUpdateItem
 import com.example.tugas.model.GetProductsItem
 import com.example.tugas.model.GetSlidersItem
@@ -40,6 +41,10 @@ interface ApiService {
         @Field("password") password: String
     ): Call<ApiResponse>
 
-
+    @GET("users/{id}/favourite")
+    fun getAllFavourite(
+        @Path("id")
+        userId: String
+    ): Call<List<GetFavouriteItem>>
 
 }

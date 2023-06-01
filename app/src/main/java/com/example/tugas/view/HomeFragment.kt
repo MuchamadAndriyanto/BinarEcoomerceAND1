@@ -11,6 +11,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -25,6 +26,7 @@ import com.example.tugas.view.adapter.ProductsAdapter
 import com.example.tugas.viewmodel.HomeViewModel
 import com.example.tugas.viewmodel.NewsViewModel
 import com.example.tugas.viewmodel.ProductsViewModel
+import com.example.tugas.viewmodel.SliderViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,6 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,19 +47,30 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        pref = requireActivity().getSharedPreferences("Register", Context.MODE_PRIVATE)
-//        val username = pref.getString("username", "username")
-//        binding.tvWelcome.text = "Welcome, $username"
+        super.onViewCreated(view, savedInstanceState)
+        val sliderViewModel = ViewModelProvider(this).get(SliderViewModel::class.java)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("dataUser", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userId", null)
 
-        imageListSliders.add(SlideModel("https://s3images.coroflot.com/user_files/individual_files/large_342665_pEpSJJXkEZDGA_3UtooVFOO88.jpg"))
-        imageListSliders.add(SlideModel("https://www.concept-phones.com/wp-content/uploads/2020/05/iPhone-Slide-Pro-concept-design-1-680x450.jpg"))
-        imageListSliders.add(SlideModel("https://dimsemenov.com/plugins/royal-slider/img/laptop.png"))
-        imageListSliders.add(SlideModel("https://i0.wp.com/www.smartprix.com/bytes/wp-content/uploads/2022/05/iPhone14-1-photoutils.com_.jpeg"))
+        // Panggil fungsi callApiSliders pada SliderViewModel
+        sliderViewModel.callApiSliders()
 
-        val slidersLayout = binding.imageSliders
-        slidersLayout.setImageList(imageListSliders)
-
+        // Observasi perubahan data slider menggunakan LiveData pada SliderViewModel
+        sliderViewModel.liveDataSlider.observe(viewLifecycleOwner, { sliders ->
+            if (sliders != null && sliders.isNotEmpty()) {
+                // Gunakan data sliders untuk mengisi imageListSliders
+                for (slider in sliders) {
+                    imageListSliders.add(SlideModel(slider.image))
+                }
+                val slidersLayout = binding.imageSliders
+                slidersLayout.setImageList(imageListSliders)
+            } else {
+                // Tangani jika data slider kosong atau gagal dimuat
+            }
+        })
     }
 
     override fun onStart() {
@@ -66,18 +80,6 @@ class HomeFragment : Fragment() {
             handler.postDelayed(runnable, 2000)
         }
         handler.post(runnable)
-
-//        val viewModelSliders = ViewModelProvider(this).get(HomeViewModel::class.java)
-//        viewModelSliders.getSlider()
-//        viewModelSliders.liveDataSliders.observe(viewLifecycleOwner, Observer { slidersList ->
-//            if (slidersList != null) {
-//                val newsAdapter = ImageSliderAdapter(slidersList)
-//                binding.imageSliders.layoutManager =
-//                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-//                binding.imageSliders.adapter = newsAdapter
-//            }
-//        })
-
 
         val viewModelNews = ViewModelProvider(this).get(NewsViewModel::class.java)
         viewModelNews.callApiNews()

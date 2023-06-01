@@ -1,10 +1,13 @@
 package com.example.tugas
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.tugas.databinding.ActivityMainBinding
@@ -14,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var buttonClicked: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,21 +35,48 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.favorit -> {
-                    findNavController().navigate(R.id.action_homeFragment_to_favoriteFragment)
+                    saveButtonClicked("favorite") // Simpan nilai "favorite"
+                    if (isUserLoggedIn()) {
+                        findNavController().navigate(R.id.action_homeFragment_to_favoriteFragment)
+                    } else {
+                        findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                    }
                     true
                 }
                 R.id.list -> {
+                    saveButtonClicked("list") // Simpan nilai "list"
                     findNavController().navigate(R.id.action_homeFragment_to_detailFragment)
                     true
                 }
                 R.id.profile -> {
-                    findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+                    saveButtonClicked("profile") // Simpan nilai "profile"
+                    if (isUserLoggedIn()) {
+                        findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+                    } else {
+                        findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                    }
                     true
                 }
                 else -> false
             }
         }
     }
+
+    private fun saveButtonClicked(buttonClicked: String) {
+        val sharedPreferences = getSharedPreferences("dataUser", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("buttonClicked", buttonClicked)
+        editor.apply()
+    }
+
+
+
+    private fun isUserLoggedIn(): Boolean {
+        val sharedPreferences = getSharedPreferences("dataUser", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userId", null)
+        return userId != null
+    }
+
 
     private fun findNavController(): NavController {
         return findNavController(R.id.fragmentContainerView2)

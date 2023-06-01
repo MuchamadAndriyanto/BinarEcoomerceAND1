@@ -13,30 +13,38 @@
         android:layout_margin="20dp"
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="250dp">
 
         <ImageView
             android:id="@+id/imgView"
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher_background"
             android:contentDescription="TODO"
+            android:src="@drawable/ic_launcher_background"
             tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_marginTop="10dp"
+            android:layout_gravity="center"
             android:text="Judul"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tvPrice"
-            android:layout_marginTop="10dp"
-            android:text="Harga"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:text="Harga"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
 
     </LinearLayout>
 
