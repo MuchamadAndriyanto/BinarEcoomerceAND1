@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,7 @@ import com.example.tugas.databinding.FragmentLoginBinding
 import com.example.tugas.model.GetUserItem
 import com.example.tugas.network.ApiClient
 import com.example.tugas.network.ApiResponse
-import com.example.tugas.viewmodel.UserViewModel
+import com.example.tugas.viewmodel.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,9 +30,9 @@ import retrofit2.Response
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
-    lateinit var sharepref : SharedPreferences
     private val apiService = ApiClient.create()
-    private lateinit var vmuser : UserViewModel
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -41,16 +42,16 @@ class LoginFragment : Fragment() {
     ): View? {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         return binding.root
+
+    sharedPreferences = requireContext().getSharedPreferences("dataUser", Context.MODE_PRIVATE)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnReg.setOnClickListener{
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-        }
 
-        sharepref = requireActivity().getSharedPreferences("Regist", Context.MODE_PRIVATE)
-        vmuser = ViewModelProvider(this).get(UserViewModel::class.java)
+        }
 
         binding.btnLogin.setOnClickListener {
             val username = binding.emailEditText.text.toString()
@@ -59,36 +60,55 @@ class LoginFragment : Fragment() {
             // Panggil metode login
             login(username, password)
         }
+      // Declare and initialize favoriteViewModel
+        favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
     }
 
     private fun login(username: String, password: String) {
+
         val call = apiService.getAllUsers()
         call.enqueue(object : Callback<List<GetUserItem>> {
             override fun onResponse(call: Call<List<GetUserItem>>, response: Response<List<GetUserItem>>) {
                 if (response.isSuccessful) {
+
                     val userList = response.body()
                     if (userList != null) {
                         // Cek apakah pengguna dengan username yang diberikan ada dalam daftar pengguna
                         val matchingUser = userList.find { it.email == username }
+                        val userId = matchingUser?.idUsers.toString()
+                        Log.d("LoginFragment", "User ID: $userId")
+
                         if (matchingUser != null && matchingUser.password == password) {
                             // Login berhasil
                             Toast.makeText(context, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                            // Simpan informasi pengguna untuk profil
-                            var addData = sharepref.edit()
-                            addData.putString("name", username)
-                            addData.putString("password", password)
-                            addData.apply()
-                            // Navigasi ke halaman beranda atau halaman lain yang sesuai
-                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        // Simpan ID pengguna ke SharedPreferences
+                            val sharedPreferences = requireContext().getSharedPreferences("dataUser", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putString("userId", matchingUser.idUsers)
+                            editor.apply()
+                            val buttonClicked = getButtonClicked()
+
+                            // Navigasi ke halaman favorit jika tombol favorit ditekan sebelumnya
+                            if (buttonClicked == "favorite") {
+                                // Panggil API untuk mendapatkan daftar favorit pengguna
+                                favoriteViewModel.callApiFavorite(userId)
+                                findNavController().navigate(R.id.action_loginFragment_to_favoriteFragment)
+                            }
+                            // Navigasi ke halaman profil jika tombol profil ditekan sebelumnya
+                            else if (buttonClicked == "profile") {
+                                findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                            }
+                            // Navigasi ke halaman beranda jika tidak ada tombol yang ditekan sebelumnya
+                            else {
+                                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                            }
+                        }
                         } else {
                             // Login gagal
                             Toast.makeText(context, "Username atau password salah", Toast.LENGTH_SHORT).show()
                         }
+
                     }
-                } else {
-                    // Respons tidak berhasil
-                    Toast.makeText(context, "Gagal melakukan login", Toast.LENGTH_SHORT).show()
-                }
             }
 
             override fun onFailure(call: Call<List<GetUserItem>>, t: Throwable) {
@@ -96,6 +116,10 @@ class LoginFragment : Fragment() {
                 Toast.makeText(context, "Terjadi kesalahan saat melakukan login", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+    private fun getButtonClicked(): String? {
+        val sharedPreferences = requireContext().getSharedPreferences("dataUser", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("buttonClicked", null)
     }
 
 }
