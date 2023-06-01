@@ -20,6 +20,12 @@ interface ApiService {
     @GET("users")
     fun getAllUsers(): Call<List<GetUserItem>>
 
+    @GET("users/{id}?")
+    fun getProfileUser(@Path("id") id:String): Call<GetUserItem>
+
+    @GET("users/{id}")
+    fun getAllUser():Call<List<GetUserItem>>
+
     @GET("sliders")
     fun getSlider():Call<List<GetSlidersItem>>
 

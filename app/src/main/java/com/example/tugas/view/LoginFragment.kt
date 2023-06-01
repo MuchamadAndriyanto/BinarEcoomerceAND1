@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.tugas.R
@@ -18,6 +19,7 @@ import com.example.tugas.databinding.FragmentLoginBinding
 import com.example.tugas.model.GetUserItem
 import com.example.tugas.network.ApiClient
 import com.example.tugas.network.ApiResponse
+import com.example.tugas.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,7 +29,9 @@ import retrofit2.Response
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+    lateinit var sharepref : SharedPreferences
     private val apiService = ApiClient.create()
+    private lateinit var vmuser : UserViewModel
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -44,6 +48,9 @@ class LoginFragment : Fragment() {
         binding.btnReg.setOnClickListener{
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
+
+        sharepref = requireActivity().getSharedPreferences("Regist", Context.MODE_PRIVATE)
+        vmuser = ViewModelProvider(this).get(UserViewModel::class.java)
 
         binding.btnLogin.setOnClickListener {
             val username = binding.emailEditText.text.toString()
@@ -67,6 +74,10 @@ class LoginFragment : Fragment() {
                             // Login berhasil
                             Toast.makeText(context, "Login Berhasil", Toast.LENGTH_SHORT).show()
                             // Simpan informasi pengguna untuk profil
+                            var addData = sharepref.edit()
+                            addData.putString("name", username)
+                            addData.putString("password", password)
+                            addData.apply()
                             // Navigasi ke halaman beranda atau halaman lain yang sesuai
                             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                         } else {
