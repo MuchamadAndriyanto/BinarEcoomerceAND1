@@ -41,21 +41,22 @@ class ProfileFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences("dataUser", Context.MODE_PRIVATE)
 
 
-        val getUser = sharedPreferences.getString("user", "")
-        binding.etUsername.setText(getUser)
+        getDataProfile()
+        /*      val getUser = sharedPreferences.getString("user", "")
+              binding.etUsername.setText(getUser)
 
-        val getNama1 = sharedPreferences.getString("namad", "")
-        binding.etNamaDepan.setText(getNama1)
+              val getNama1 = sharedPreferences.getString("namad", "")
+              binding.etNamaDepan.setText(getNama1)
 
-        val getNama2 = sharedPreferences.getString("namab", "")
-        binding.etNamaBelakang.setText(getNama2)
+              val getNama2 = sharedPreferences.getString("namab", "")
+              binding.etNamaBelakang.setText(getNama2)
 
-        val getAlamat = sharedPreferences.getString("alamat", "")
-        binding.etAlamat.setText(getAlamat)
+              val getAlamat = sharedPreferences.getString("alamat", "")
+              binding.etAlamat.setText(getAlamat)
 
-        binding.textView2.text = "$getNama1 $getNama2"
-        binding.textView1.text = "$getUser"
-        /*        val name = sharedPreferences.getString("username","username")
+              binding.textView2.text = "$getNama1 $getNama2"
+              binding.textView1.text = "$getUser"
+              *//*        val name = sharedPreferences.getString("username","username")
                 editor = share.edit()
                 id = sharedPreferences.getString("userId", "").toString()
 
@@ -83,6 +84,19 @@ class ProfileFragment : Fragment() {
 
     }
 
+    fun getDataProfile() {
+        sharedPreferences = requireContext().getSharedPreferences("dataUser", Context.MODE_PRIVATE)
+        val id = sharedPreferences.getString("userId", "").toString()
+        model.getProfileById(id)
+        model.dataUserProfile.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.etUsername.setText(it.name)
+
+            }
+        }
+    }
+}
+
 /*    fun getDataProfile() {
         model.getProfileById(id)
         model.dataUserProfile.observe(viewLifecycleOwner){
@@ -99,4 +113,4 @@ class ProfileFragment : Fragment() {
         super.onStart()
         getDataProfile()
     }*/
-}
+

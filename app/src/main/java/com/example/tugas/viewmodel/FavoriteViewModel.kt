@@ -16,7 +16,7 @@ class FavoriteViewModel@Inject constructor(private var api : ApiService) : ViewM
     val liveDataFavorite: MutableLiveData<List<GetFavouriteItem>?> = MutableLiveData()
 
     fun callApiFavorite(userId: String){
-        api.getAllFavourite(userId).enqueue(object : Callback<List<GetFavouriteItem>> {
+        api.getFavourite(userId).enqueue(object : Callback<List<GetFavouriteItem>> {
             override fun onResponse(
                 call: Call<List<GetFavouriteItem>>,
                 response: Response<List<GetFavouriteItem>>

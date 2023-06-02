@@ -3,13 +3,8 @@ package com.example.tugas
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.tugas.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var buttonClicked: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.list -> {
                     saveButtonClicked("list") // Simpan nilai "list"
-                    findNavController().navigate(R.id.action_homeFragment_to_detailFragment)
+                    findNavController().navigate(R.id.action_homeFragment_to_historyFragment)
                     true
                 }
                 R.id.profile -> {
@@ -69,16 +63,13 @@ class MainActivity : AppCompatActivity() {
         editor.apply()
     }
 
-
-
     private fun isUserLoggedIn(): Boolean {
         val sharedPreferences = getSharedPreferences("dataUser", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userId", null)
         return userId != null
     }
 
-
     private fun findNavController(): NavController {
-        return findNavController(R.id.fragmentContainerView2)
+        return supportFragmentManager.findFragmentById(R.id.fragmentContainerView2)!!.findNavController()
     }
 }
