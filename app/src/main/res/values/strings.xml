@@ -31,6 +31,8 @@
     <string name="tv_update">Update</string>
     <string name="tv_nama">nama</string>
     <string name="tv_logout">Logout</string>
+    <string name="tv_nama_belakang">Nama Belakang</string>
+    <string name="tv_nama_Depan">Nama Depan</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 </resources>
